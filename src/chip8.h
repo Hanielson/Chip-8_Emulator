@@ -7,6 +7,7 @@
 #include <fstream>
 #include <cmath>
 #include <stack>
+#include <ctime>
 #include <SDL.h>
 
 class Chip8{
@@ -37,6 +38,8 @@ class Chip8{
 
         unsigned char sound_t = 0xFF;
 
+        unsigned char count = 0x0;
+
         unsigned char reg[16];
 
         bool display[64][32];
@@ -49,6 +52,8 @@ class Chip8{
 
         SDL_Color off;
 
+        SDL_Event chip_event;
+
         int clear_screen();
 
         bool is_pixel_on(const SDL_Color *color);
@@ -56,6 +61,10 @@ class Chip8{
         int colorPixel(unsigned char x_coord , unsigned char y_coord , bool pixel_on);
 
         int draw(unsigned char x_coord , unsigned char y_coord , unsigned char rows);
+
+        void setTimers();
+
+        unsigned char fontAddr(unsigned char font_char);
 
         int loop();
 };
