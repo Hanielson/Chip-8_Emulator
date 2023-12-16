@@ -87,7 +87,8 @@ int Chip8::initialize(){
 
 int Chip8::load_rom(const char *rom_name){
 
-    std::fstream rom(rom_name , std::ios_base::in);
+    // Necessary to open file as binary -> if not explicit, the function opens it as text
+    std::fstream rom(rom_name , std::ios_base::in | std::ios_base::binary);
 
     unsigned int RAM_pos = 0x200;
 
@@ -302,7 +303,7 @@ int Chip8::loop(){
             instruction = (instruction << 8) | RAM[pc + 1];
 
             // DEBUGGING
-            fprintf(stdout , "PC : %x ; Instruction : %x ; RAM[pc] : %x ; RAM[pc + 1] : %x\n" , pc , instruction , RAM[pc] , RAM[pc + 1]);
+            //fprintf(stdout , "PC : %x ; Instruction : %x ; RAM[pc] : %x ; RAM[pc + 1] : %x\n" , pc , instruction , RAM[pc] , RAM[pc + 1]);
 
             pc += (unsigned int)0x2;
 
@@ -627,8 +628,14 @@ int Chip8::loop(){
         }
         else{
             
-            //fprintf(stderr , "PC points to outside reserved program memory...\n");
-            //return -1;
+            fprintf(stderr , "PC points to outside reserved program memory...\n");
+            while(true){
+                SDL_WaitEvent(&chip_event);
+                if(chip_event.type == SDL_QUIT){
+                    SDL_Quit();
+                }
+            }
+            return -1;
 
         }
 
